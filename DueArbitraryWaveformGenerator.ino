@@ -1017,6 +1017,7 @@ void loop()
         {
           Serial.println("\n   Wave Shape 0 = Sine wave");
           Serial.println(  "   Wave Shape 1 = Triangle wave");
+          Serial.println(  "   Wave Shape 2 = Arbitrary wave");
           Serial.println(  "   Wave Shape 3 = Programmable Staircase wave");
           Serial.println(  "   Wave Shape 4 = Square Root wave");
           Serial.println(  "   Wave Shape 5 = Ring Modulator wave");
