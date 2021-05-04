@@ -1,4 +1,2 @@
-# IMPORTANT: Don't click the "Clone or download" button.
-# To download the files click "Releases" on the right. 
-This is necessary because one of the files is over 25Mb.
-NOTE:  Clicking anything else may only download this readme file.
+INO code development improvements to ArduinoDueArbitraryWaveformGeneratorAndController Version 1.2.
+These include addition of User Defined Equation code modifications which builds upon and increases functionality with custom wave shapes and control using Serial Monitor. There are now 7 wave shapes included (sine, triangle, arbitrary, staircase, square root, ring modulator and pseudo noise) each with variables which can be changed within the Serial Monitor. Changing variables will change the wave shape.
