@@ -15,12 +15,11 @@
 //
 // Version 2, introduced in 2021 adds the ability to control extra parameters, as well as adding more data to the arbitrary wave after the initial upload (via the accomanying GUI, also found on the above website/s), and other features, yet to be finished!
 //
-// The extra parameters ability was inspired and partially developed by Michael Szoke, who is also largely responsible for the existence of the staircase wave, 
-// and entirely responsible for the square root waves. He deserves great credit for his much appreciated effort.
-// Type "x" in Serial Monitor to access Extra commands for each wave shape, or open the Extras window in the GUI.
-//
+// The extra parameters ability for all wave forms was inspired Michael Szoke, whose vision and his development of the initial demonstration code is largely responsible 
+// for the existence of the staircase wave, sample and hold, square root wave, ring modulator wave and noise. He deserves great credit for his much appreciated effort.
 // See Github fork:  https://github.com/mszoke01/ArduinoDueArbitraryWaveformGeneratorAndController
 //
+// Type "x" in Serial Monitor to access Extra commands for each wave shape, or open the Extras window in the GUI.
 //
 // Use the accompanying separate General User Interface program (GUI mentioned above) to control the Arduino from your PC. See its help file (in its data folder, or via the help button in the GUI) for more info.
 //
@@ -223,7 +222,7 @@ byte       NumWS = 6;       // Total number of different WaveShapes (7 counting 
 // y = A*sin(B(x + C)) + D
 float      WS0a = 1.0;  // A  Amplitude
 float      WS0b = 1.0;  // B  Intra-Cycle Period. Does not change base frequency. But changes "frequency" within each 1/2 cycle. eg: 0.333 triples frequency (1/3 period) by shortening sub-wavelength within each 1/2 cycle
-float      WS0c = 0.0;  // C  Phase shift
+float      WS0c = 0.5;  // C  Phase shift
 float      WS0d = 0.5;  // D  DC Offset or Vertical shift. Represents half of Arduino's maximum DAC output voltage
 int        WS0numS = 0; //    Number of steps or samples per half wave
 int        WS0seg;      //    Sample and Hold segment number
@@ -233,7 +232,7 @@ uint16_t   WS0sampV;    //    Sample voltage
 // y = Ax+B
 float      WS1a = 1.0;  // A  Amplitude / Slope
 float      WS1b = 0.5;  // B  DC Offset, Y intercept or Vertical shift.
-float      WS1c = 0.0;  //    Phase shift
+float      WS1c = 0.5;  //    Phase shift
 int        WS1numS = 0; //    Number of steps or samples per half wave (0 = off)
 // int       WS1seg;      //    Sample and Hold segment number  -  no longer used
 int32_t    WS1sampV;    //    Sample voltage
@@ -247,7 +246,7 @@ int        WS2numS = 0; //  Number of steps or samples per half wave
 int        WS2seg;      //  Sample and Hold segment number
 uint16_t   WS2sampV;    //  Sample voltage
 
-// WaveShape = 3 - Step Square wave variables (10 steps)
+// WaveShape = 3 - Staircase Wave variables (10 steps)
 float      WS3a0 = 0.00;  // A0 - Segments
 float      WS3a1 = 0.111; // A1
 float      WS3a2 = 0.222; // A2
@@ -272,7 +271,7 @@ float      WS3b8 = 0.90;  // B8
 int        Nextb;         //used in Wave 3 randomiser function
 long       RandNum;       //used in Wave 3 randomiser function
 
-// WaveShape = 4 - Square Root function variables
+// WaveShape = 4 - Square Root Wave variables
 //y = A*(x + B)^0.5 + C or y = -(A*(x + B)^0.5) + C
 float       WS4au = 50.0; // A
 float       WS4bu = 0.0;  // B
@@ -285,7 +284,7 @@ int         WS4numS = 0;  // Number of steps or samples per half wave
 int         WS4seg;       // Sample and Hold segment number
 uint16_t    WS4sampV;     // Sample voltage
 
-//// WaveShape = 5 - Ring Modulator wave variables
+//// WaveShape = 5 - Ring Modulator Wave variables
 // y = sin(A)*sin(B) = 0.5*(cos(A-B) - cos(A+B))
 float       WS5f2 = 20;  // Frequency multiple of second wave must be >=1
 
@@ -293,7 +292,7 @@ int         WS5numS = 0; // Number of steps or samples per half wave
 int         WS5seg;      // Sample and Hold segment number
 uint16_t    WS5sampV;    // Sample voltage
 
-//// WaveShape = 6 - Noise variables
+//// WaveShape = 6 - Pseudo Noise Wave variables
 //y = pseudorandom integer
 int         WS6a  = 4095;  // Amplitude
 int         WS6n  = 1;     // Noise (pseudorandom) profile (default 1 which is On full). Range is 0 to 2048. O is off, 1 is on full. Greater than 1 is coarser noise profile.
@@ -357,7 +356,7 @@ void setup()
     Serial.print(ActualDuty);
     Serial.println(" %\n");
   }
-   randomSeed(analogRead(0)); // needed for randomiser function
+  randomSeed(analogRead(0)); // needed for randomiser function
 }
 
 void CreateWaveFull() // WaveFull: (actually half a wave in full resolution) for low freq use; prevents 'sample' noise at very low audio freq's (sample-skipping used without DMA)
@@ -466,8 +465,6 @@ void CreateWaveFull() // WaveFull: (actually half a wave in full resolution) for
     int16_t sampTime = 0;    // sample time index - indicates when to take a sample (samples will always be taken at extreme top & bottom of cycle at all phase shifts) - Triangle wave
     int offset;             // DC offset or vertical shift of wave
     int32_t waveTemp;      // needed only in wave 0, 1 and 5 (so far)
-    int32_t waveTemp1;    // needed only in wave 5 (so far)
-    int32_t waveTemp2;   // needed only in wave 5 (so far)
     if      (WaveShape == 0) offset = (NWAVEFULL / 2) + (int)((WS0d - 0.5) * NWAVEFULL);
     else if (WaveShape == 1)
     {
@@ -585,7 +582,7 @@ void CreateWaveFull() // WaveFull: (actually half a wave in full resolution) for
         //Multiply two sine waves
         // Use formula sin(A)*sin(B) = 0.5*(cos(A-B) - cos(A+B))
         // where: A = (index) and B = (WS5f2 * index) which means sine waves are identical except wave B is a factor WS5f2 times higher in frequency
-        waveTemp = (int32_t) ((4095.0 / 2) + (0.5 * (((cos((((2.0 * PI) / NWAVEFULL) / 2) * (1 - WS5f2) * index)) * 4095.0 / 2 ) - (cos((((2.0 * PI) / NWAVEFULL) / 2) * (1 + WS5f2) * index)) * 4095.0 / 2)));   //(waveTemp1 * waveTemp2);
+        waveTemp = (int32_t) ((4095.0 / 2) + (0.5 * (((cos((((2.0 * PI) / NWAVEFULL) / 2) * (1 - WS5f2) * index)) * 4095.0 / 2 ) - (cos((((2.0 * PI) / NWAVEFULL) / 2) * (1 + WS5f2) * index)) * 4095.0 / 2))); 
 
         // Sample and Hold function (i.e. sample rate reduction)
         if (WS5numS > 0)  
@@ -785,9 +782,9 @@ void loop()
         else if (WaveShape == 1) Serial.println("             ******** Triangle Wave ********\n");
         else if (WaveShape == 2) Serial.println("             ******** Arbitrary Wave *******\n");
         else if (WaveShape == 3) Serial.println("             ******** Staircase Wave *******\n");
-        else if (WaveShape == 4) Serial.println("             ******  Square Root Wave ******\n");
-        else if (WaveShape == 5) Serial.println("             ****** Ring Modulator Wave ****\n");
-        else if (WaveShape == 6) Serial.println("             ****** Pseudo Noise Wave ******\n"); 
+        else if (WaveShape == 4) Serial.println("             ******* Square Root Wave ******\n");
+        else if (WaveShape == 5) Serial.println("             ***** Ring Modulator Wave *****\n");
+        else if (WaveShape == 6) Serial.println("             ****** Pseudo Noise Wave ******\n");
         CreateWaveFull();
         CreateWaveTable();
         CreateNewWave();
@@ -1018,10 +1015,10 @@ void loop()
         }
         else if (UserChars[1] == 'w') // if received xw List Wave shapes
         {
-          Serial.println("\n   Wave Shape 0 = Sine wave.");
+          Serial.println("\n   Wave Shape 0 = Sine wave");
           Serial.println(  "   Wave Shape 1 = Triangle wave");
           Serial.println(  "   Wave Shape 3 = Programmable Staircase wave");
-          Serial.println(  "   Wave Shape 4 = Square Root function wave");
+          Serial.println(  "   Wave Shape 4 = Square Root wave");
           Serial.println(  "   Wave Shape 5 = Ring Modulator wave");
           Serial.println(  "   Wave Shape 6 = Pseudo Noise wave\n\n");
         }
@@ -1105,7 +1102,8 @@ void loop()
             Serial.println(  "   x1b = B - DC Offset / Vertical Shift (default = 0.5)");
             Serial.println(  "   x1c = C - Phase Shift (default = 0.0)");
             Serial.println(  "   x1s     - Sample and Hold. Number of samples per 1/2 cycle (default = 0 which is off)\n");
-            Serial.println(  "   Hint: Try A = -1 to invert triangle. Also try A = 2 and B = 0.75 for trapezoid wave.\n");
+            Serial.println(  "   Hint 1: Try A = -1 to invert triangle. Also try A = 2 and B = 0.75 for trapezoid wave.");
+            Serial.println(  "   Hint 2: Try change Duty Cycle .\n");
             Serial.println(  "   Current values: ");
             Serial.print(    "   A = "); Serial.print(WS1a); Serial.print(", B = "); Serial.print(WS1b); Serial.print(", C = "); Serial.println(WS1c);
             Serial.print(    "   Sample and Hold: x1s = "); Serial.println(WS1numS); Serial.println("\n");
@@ -1545,22 +1543,21 @@ void loop()
         {
           if (UserChars[2] == 'f')   // if recieved x5f
           {
-            if (UserInput >= 1)
+            if ((UserInput >= 1 && WS5numS == 0) || (WS5numS > 0 && WS5numS > UserInput))
             {
               WS5f2 = UserInput;
-              Serial.print("   Wave Shape 5 - Frequency of second wave changed to: ");
-              Serial.println(UserInput); Serial.println("");              
+              Serial.print("   Wave Shape 5 - Frequency of second wave changed to: "); Serial.println(UserInput); Serial.println("");              
             }
+            else { Serial.print("   Invalid input for x5f. Must be greater than 1 & less than number of samples x5s, which is "); Serial.println(WS5numS);Serial.println(""); }
           }     
           else if (UserChars[2] == 's') // if received x5s - Sample and Hold
           {
-            if (UserInput > WS5f2)
+            if ((UserInput > WS5f2 && UserInput > 0) || UserInput == 0)
             {
               WS5numS = ceil(abs(UserInput));
-              Serial.print("   Number of samples per 1/2 cycle changed to: ");
-              Serial.println(ceil(abs(UserInput)));              
+              Serial.print("   Number of samples per 1/2 cycle changed to: "); Serial.println(ceil(abs(UserInput)));              
             }
-            else Serial.println("   Not valid input for x5s. Must enter integer greater than second wave frequency paramter (i.e. x5f).\n");
+            else { Serial.print("   Invalid input for x5s. Must be greater than second wave frequency paramter x5f, which is "); Serial.println(WS5f2);Serial.println(""); }
           }           
           else  // if revieved x5 with no more char's after it - Wave Shape 5 Help:
           {
@@ -1878,9 +1875,9 @@ void loop()
         else if (WaveShape == 1) Serial.println("             ******** Triangle Wave ********\n");
         else if (WaveShape == 2) Serial.println("             ******** Arbitrary Wave *******\n");
         else if (WaveShape == 3) Serial.println("             ******** Staircase Wave *******\n");
-        else if (WaveShape == 4) Serial.println("             ******  Square Root Wave ******\n");
-        else if (WaveShape == 5) Serial.println("             ****** Ring Modulator Wave ****\n");
-        else if (WaveShape == 6) Serial.println("             ****** Pseudo Noise Wave ******\n");   
+        else if (WaveShape == 4) Serial.println("             ******* Square Root Wave ******\n");
+        else if (WaveShape == 5) Serial.println("             ***** Ring Modulator Wave *****\n");
+        else if (WaveShape == 6) Serial.println("             ****** Pseudo Noise Wave ******\n");
       }
       else if (UserChars[0] == 'M') // Min & max duty
       {
