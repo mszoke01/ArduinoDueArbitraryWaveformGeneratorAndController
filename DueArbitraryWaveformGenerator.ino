@@ -1104,7 +1104,7 @@ void loop()
             Serial.println(  "   x1c = C - Phase Shift (default = 0.0)");
             Serial.println(  "   x1s     - Sample and Hold. Number of samples per 1/2 cycle (default = 0 which is off)\n");
             Serial.println(  "   Hint 1: Try A = -1 to invert triangle. Also try A = 2 and B = 0.75 for trapezoid wave.");
-            Serial.println(  "   Hint 2: Try change Duty Cycle .\n");
+            Serial.println(  "   Hint 2: Try change the Duty Cycle to 0 or 100.\n");
             Serial.println(  "   Current values: ");
             Serial.print(    "   A = "); Serial.print(WS1a); Serial.print(", B = "); Serial.print(WS1b); Serial.print(", C = "); Serial.println(WS1c);
             Serial.print(    "   Sample and Hold: x1s = "); Serial.println(WS1numS); Serial.println("\n");
