@@ -7,6 +7,6 @@ staircase, square root, ring modulator and pseudo noise) each with variables (e.
 including a sample and hold function capability which can be changed within the Serial Monitor. 
 Changing variables and functions will modify the wave shape. 
 
-In Serial Monitor type "x" and then press "Enter" ito access Extra commands for each wave shape.
+In the Serial Monitor type "x" and then press "Enter" to access Extra commands for each wave shape.
 
 Analogue wave max freq: 100kHz. Square wave max freq: 42MHz. Duty cycle adjustable from 0% to 100%
