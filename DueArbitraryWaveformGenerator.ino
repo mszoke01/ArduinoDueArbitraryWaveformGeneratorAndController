@@ -1061,7 +1061,7 @@ void loop()
             Serial.println(  "        y = A*sin(B(x + C)) + D\n");
             Serial.println(  "   x0a = A - Amplitude (default = 1.0)");
             Serial.println(  "   x0b = B - Intra-Cycle Period (default = 1.0)");
-            Serial.println(  "   x0c = C - Phase Shift (default = 0.0)");
+            Serial.println(  "   x0c = C - Phase Shift (default = 0.5)");
             Serial.println(  "   x0d = D - D.C. Offset / Vertical Shift (default = 0.5)");
             Serial.println(  "   x0s     - Sample and Hold. Number of samples per 1/2 cycle (default = 0 which is off)\n");
             Serial.println(  "   Current values: ");
@@ -1101,7 +1101,7 @@ void loop()
             Serial.println(  "             y = A/2+B-A*x\n"); // y = Ax+B\n");
             Serial.println(  "   x1a = A - Amplitude / Slope (default = 1.0)");
             Serial.println(  "   x1b = B - DC Offset / Vertical Shift (default = 0.5)");
-            Serial.println(  "   x1c = C - Phase Shift (default = 0.0)");
+            Serial.println(  "   x1c = C - Phase Shift (default = 0.5)");
             Serial.println(  "   x1s     - Sample and Hold. Number of samples per 1/2 cycle (default = 0 which is off)\n");
             Serial.println(  "   Hint 1: Try A = -1 to invert triangle. Also try A = 2 and B = 0.75 for trapezoid wave.");
             Serial.println(  "   Hint 2: Try change the Duty Cycle to 0 or 100.\n");
