@@ -15,8 +15,8 @@
 //
 // Version 2, introduced in 2021 adds the ability to control extra parameters, as well as adding more data to the arbitrary wave after the initial upload (via the accomanying GUI, also found on the above website/s), and other features, yet to be finished!
 //
-// The extra parameters ability for all wave forms was inspired by Michael Szoke, whose vision and his development of the initial demonstration code is largely responsible 
-// for the existence of the staircase wave, sample and hold, square root wave, ring modulator wave and noise. He deserves great credit for his much appreciated effort.
+// The extra parameters ability for all wave forms was inspired by Michael Szoke, whose vision and his development of the initial demonstration code lead to 
+// the development of the staircase wave, sample and hold, square root wave, ring modulator wave and noise. He deserves great credit for his much appreciated effort.
 // See Github fork:  https://github.com/mszoke01/ArduinoDueArbitraryWaveformGeneratorAndController
 //
 // Type "x" in Serial Monitor to access Extra commands for each wave shape, or open the Extras window in the GUI.
