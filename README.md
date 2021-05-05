@@ -12,7 +12,7 @@ To use:
 2) The analogue wave output is taken from DAC0. Pin 7 for square wave output.
 3) In the Serial Monitor type x and then press Enter to access Extra commands for each wave shape.
 
-Example Serial Monitor commands:  Type x0 then Press enter. This will show you a list of all variables you can change on the sine wave in the Serial Monitor. To change a variable, the Serial Monitor command format is number then variable command (i.e. try -0.5 as the number and x0a is the command for sine wave amplitude). So in the Serial Monitor type -0.5x0a and press enter to change the variable for sine amplitude which will reduce the amplitude and invert the wave. Then type xx and press enter to update all waves with all variable changes. Type w to change to other wave forms. For more commands type ? and press enter.
+Example Serial Monitor commands:  Type x0 then press Enter. This will show you a list of all variables you can change on the sine wave in the Serial Monitor. To change a variable, the Serial Monitor command format is number then variable command (i.e. try -0.5 as the number and x0a is the command for sine wave amplitude). So in the Serial Monitor type -0.5x0a and press Enter to change the variable for sine amplitude which will reduce the amplitude and invert the wave. Then type xx and press Enter to update all waves with all variable changes. To change to other wave forms type w and then press Enter. For more commands type ? and then press enter.
 
 
 Analogue wave max freq: 100kHz. Square wave max freq: 42MHz. Duty cycle adjustable from 0% to 100%
